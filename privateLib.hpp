@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <vector>
 #include <sstream>
+#include <fstream>
+
 #define DEFAULT_VALID_INPUT_FLOAT DEFAULT_VALID_INPUT_DOUBLE
 #define DEFAULT_VALID_INPUT_LONG DEFAULT_VALID_INPUT_INT
 #define MAX_SIGNED_INTEGER 2147483647
@@ -61,7 +63,12 @@ class input {
 		
 		static bool validateInputRange(int low, int high, int input);
 		
-		static std::string intToString (int i[], int length);
+		static std::string intToString(int i[], int length);
 };
 
+class parse {
+	
+	public:
+		static std::vector<std::string> parseFileText(std::ifstream file);	
+};
 #endif
