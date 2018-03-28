@@ -163,3 +163,15 @@ bool input::validateInputRange(int low, int high, int input)
 	}
 	return low<=input && high >= input;
 }
+
+
+std::vector<std::string> parse::parseFileText(std::ifstream file)
+{
+	std::vector<std::string> vect;
+	std::string temp;
+	
+	while(file >> temp)
+		vect.push_back(temp);
+	return vect;
+}
+
