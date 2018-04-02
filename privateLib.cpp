@@ -49,11 +49,24 @@ double input::validateInputDouble (std::string & inputPrompt, const std::string 
         	std::string temp = "";
 			std::cout << std::endl << inputPrompt;
 			std::cin  >> temp;
+			bool point = false;
 			while(!validateInput(temp,validChars)){
 				temp = "";
+				if(point)
+				{
+					std::cout << std::endl << "Error! Two decimal points in number!" << std::endl;
+					point = false;
+				}
+				else
 				std::cout << std::endl << invalidMsg << std::endl;
 				std::cout << inputPrompt;
 				std::cin  >> temp;
+				if(parse::containsChar(temp,'.'))
+				{
+					if(parse::countChar(temp,'.') > 1)
+					temp = "h";
+					point = true;
+				}
 			}
 		return static_cast<double>(atof(temp.c_str()));
         }
@@ -63,12 +76,24 @@ float input::validateInputFloat (std::string & inputPrompt,const std::string & v
         	std::string temp = "";
 			std::cout << std::endl << inputPrompt;
 			std::cin  >> temp;
+			bool point = false;
 			while(!validateInput(temp,validChars)){
 				temp = "";
+					if(point)
+				{
+					std::cout << std::endl << "Error! Two decimal points in number!" << std::endl;
+					point = false;
+				}
 				std::cout << std::endl << invalidMsg << std::endl;
 				std::cout << inputPrompt;
 				std::cin  >> temp;
 			}
+			if(parse::containsChar(temp,'.'))
+				{
+					if(parse::countChar(temp,'.') > 1)
+					temp = "h";
+					point = true;
+				}
 		return atof(temp.c_str());
         }
         
@@ -173,5 +198,20 @@ std::vector<std::string> parse::parseFileText(std::ifstream file)
 	while(file >> temp)
 		vect.push_back(temp);
 	return vect;
+}
+
+int parse::countChar(std::string& string, char c)
+{
+  int count = 0;
+
+  for (int i = 0; i < string.size(); i++)
+    if (string[i] == c) count++;
+
+  return count;
+}
+
+bool parse::containsChar(std::string& string, char c)
+{
+	return string.find_first_not_of(c) != std::string::npos;
 }
 
