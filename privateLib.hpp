@@ -72,5 +72,6 @@ class parse {
 		static std::vector<std::string> parseFileText(std::ifstream file);
 		static int countChar(std::string& string, char c);
 		static bool containsChar(std::string& string, char c);
+		static bool validNegative(std::string& num);
 };
 #endif

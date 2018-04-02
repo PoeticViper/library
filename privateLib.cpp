@@ -33,9 +33,21 @@ int input::validateInputInt (std::string & inputPrompt, const std::string & vali
         std::string temp = "";
 		std::cout << std::endl << inputPrompt;
 		std::cin  >> temp;
-			while(!validateInput(temp,validChars)){
+		bool neg = false;
+			while(!validateInput(temp,validChars) || !parse::validNegative(temp)){
 				temp = "";
-				std::cout << std::endl << invalidMsg << std::endl;
+				if(parse::containsChar(temp, '-'))
+					if(!parse::validNegative(temp))
+					{
+						neg = true;
+					}
+				if(neg)
+					{
+						std::cout << std::endl << "Error! Invalid negative!" << std::endl;
+						neg = false;
+					}
+				else	
+					std::cout << std::endl << invalidMsg << std::endl;
 				std::cout << inputPrompt;
 				std::cin  >> temp;
 					if(validateInput(temp,validChars) && !(atol(temp.c_str()) <=MAX_SIGNED_INTEGER && atol(temp.c_str())>= MIN_INTEGER))
@@ -50,24 +62,30 @@ double input::validateInputDouble (std::string & inputPrompt, const std::string 
 			std::cout << std::endl << inputPrompt;
 			std::cin  >> temp;
 			bool point = false;
-			while(!validateInput(temp,validChars) || parse::countChar(temp,'.') > 1){
-				if(parse::containsChar(temp,'.'))
+			bool neg = false;
+			while(!validateInput(temp,validChars) || parse::countChar(temp,'.') > 1 || !parse::validNegative(temp))
+			{
+			neg = parse::containsChar(temp, '-') && !parse::validNegative(temp);
+			point =  parse::containsChar(temp,'.') && parse::countChar(temp,'.') > 1;
+				if(point || neg)
 				{
-					if(parse::countChar(temp,'.') > 1)
-					temp = "h";
-					point = true;
-				}
-				temp = "";
-				if(point)
-				{
-					std::cout << std::endl << "Error! More than 1 decimal point in number!" << std::endl;
-					point = false;
+					if(point)
+					{
+						std::cout << std::endl << "Error! More than 1 decimal point in number!" << std::endl;
+						point = false;
+					}
+					if(neg)
+					{
+						std::cout << std::endl << "Error! Invalid negative!" << std::endl;
+						neg = false;
+					}
 				}
 				else
 				std::cout << std::endl << invalidMsg << std::endl;
 				std::cout << inputPrompt;
+				temp = "";
 				std::cin  >> temp;
-				
+
 			}
 		return static_cast<double>(atof(temp.c_str()));
         }
@@ -78,19 +96,26 @@ float input::validateInputFloat (std::string & inputPrompt,const std::string & v
 			std::cout << std::endl << inputPrompt;
 			std::cin  >> temp;
 			bool point = false;
-			while(!validateInput(temp,validChars) || parse::countChar(temp,'.') > 1){
-				if(parse::containsChar(temp,'.'))
-				{
-					if(parse::countChar(temp,'.') > 1)
-					temp = "h";
-					point = true;
-				}
+			bool neg = false;
+			while(!validateInput(temp,validChars) || parse::countChar(temp,'.') > 1 || !parse::validNegative(temp))
+			{
+				neg = parse::containsChar(temp, '-') && !parse::validNegative(temp);
+				point =  parse::containsChar(temp,'.') && parse::countChar(temp,'.') > 1;
 				temp = "";
-					if(point)
+				if(point || neg)
 				{
-					std::cout << std::endl << "Error! More than 1 decimal point in number!" << std::endl;
-					point = false;
+					if(point)
+					{
+						std::cout << std::endl << "Error! More than 1 decimal point in number!" << std::endl;
+						point = false;
+					}
+					if(neg)
+					{
+						std::cout << std::endl << "Error! Invalid negative!" << std::endl;
+						neg = false;
+					}
 				}
+				else
 				std::cout << std::endl << invalidMsg << std::endl;
 				std::cout << inputPrompt;
 				std::cin  >> temp;
@@ -103,12 +128,27 @@ long input::validateInputLong (std::string & inputPrompt, const std::string & va
         	std::string temp = "";
 			std::cout << std::endl << inputPrompt;
 			std::cin  >> temp;
-			while(!validateInput(temp,validChars)){
+			bool neg =false;
+			while(!validateInput(temp,validChars) || !parse::validNegative(temp)){
 				temp = "";
+					if(neg)
+					{
+						std::cout << std::endl << "Error! Invalid negative!" << std::endl;
+						neg = false;
+					}
+				else	
 				std::cout << std::endl << invalidMsg << std::endl;
 				std::cout << inputPrompt;
 				std::cin  >> temp;
+				if(parse::containsChar(temp, '-'))
+					if(!parse::validNegative(temp))
+					{
+						temp = "h";
+						neg = true;
+						continue;
+					}
 			}
+			
 		return atol(temp.c_str());
         }
         
@@ -214,5 +254,10 @@ int parse::countChar(std::string& string, char c)
 bool parse::containsChar(std::string& string, char c)
 {
 	return string.find_first_not_of(c) != std::string::npos;
+}
+
+bool parse::validNegative(std::string& number)
+{
+	return number[0] == '-' && countChar(number, '-') == 1;
 }
 
