@@ -69,6 +69,8 @@ class input {
 class parse {
 	
 	public:
-		static std::vector<std::string> parseFileText(std::ifstream file);	
+		static std::vector<std::string> parseFileText(std::ifstream file);
+		static int countChar(std::string& string, char c);
+		static bool containsChar(std::string& string, char c);
 };
 #endif
