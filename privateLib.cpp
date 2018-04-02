@@ -50,23 +50,24 @@ double input::validateInputDouble (std::string & inputPrompt, const std::string 
 			std::cout << std::endl << inputPrompt;
 			std::cin  >> temp;
 			bool point = false;
-			while(!validateInput(temp,validChars)){
-				temp = "";
-				if(point)
-				{
-					std::cout << std::endl << "Error! Two decimal points in number!" << std::endl;
-					point = false;
-				}
-				else
-				std::cout << std::endl << invalidMsg << std::endl;
-				std::cout << inputPrompt;
-				std::cin  >> temp;
+			while(!validateInput(temp,validChars) || parse::countChar(temp,'.') > 1){
 				if(parse::containsChar(temp,'.'))
 				{
 					if(parse::countChar(temp,'.') > 1)
 					temp = "h";
 					point = true;
 				}
+				temp = "";
+				if(point)
+				{
+					std::cout << std::endl << "Error! More than 1 decimal point in number!" << std::endl;
+					point = false;
+				}
+				else
+				std::cout << std::endl << invalidMsg << std::endl;
+				std::cout << inputPrompt;
+				std::cin  >> temp;
+				
 			}
 		return static_cast<double>(atof(temp.c_str()));
         }
@@ -77,23 +78,23 @@ float input::validateInputFloat (std::string & inputPrompt,const std::string & v
 			std::cout << std::endl << inputPrompt;
 			std::cin  >> temp;
 			bool point = false;
-			while(!validateInput(temp,validChars)){
+			while(!validateInput(temp,validChars) || parse::countChar(temp,'.') > 1){
+				if(parse::containsChar(temp,'.'))
+				{
+					if(parse::countChar(temp,'.') > 1)
+					temp = "h";
+					point = true;
+				}
 				temp = "";
 					if(point)
 				{
-					std::cout << std::endl << "Error! Two decimal points in number!" << std::endl;
+					std::cout << std::endl << "Error! More than 1 decimal point in number!" << std::endl;
 					point = false;
 				}
 				std::cout << std::endl << invalidMsg << std::endl;
 				std::cout << inputPrompt;
 				std::cin  >> temp;
 			}
-			if(parse::containsChar(temp,'.'))
-				{
-					if(parse::countChar(temp,'.') > 1)
-					temp = "h";
-					point = true;
-				}
 		return atof(temp.c_str());
         }
         
