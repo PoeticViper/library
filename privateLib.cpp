@@ -1,6 +1,6 @@
 #include "privateLib.hpp"
 
-std::string input::validateInputString (std::string & inputPrompt, const std::string & validChars, const std::string & invalidMsg)
+std::string input::getString (std::string & inputPrompt, const std::string & validChars, const std::string & invalidMsg)
 {
 		std::string temp = "";
 		std::cout << std::endl << inputPrompt;
@@ -14,7 +14,7 @@ std::string input::validateInputString (std::string & inputPrompt, const std::st
 	return temp;
 }
 
-char input::validateInputChar(std::string & inputPrompt, const std::string & validChars, const std::string & invalidMsg)
+char input::getChar(std::string & inputPrompt, const std::string & validChars, const std::string & invalidMsg)
 {
 	std::string temp = "";
 		std::cout << std::endl << inputPrompt;
@@ -28,42 +28,79 @@ char input::validateInputChar(std::string & inputPrompt, const std::string & val
 	return temp.at(0);
 }
 
-int input::validateInputInt (std::string & inputPrompt, const std::string & validChars,  const std::string & invalidMsg)
-        {
+int input::getInt (std::string & inputPrompt, const std::string & validChars,  const std::string & invalidMsg)
+{
         std::string temp = "";
 		std::cout << std::endl << inputPrompt;
 		std::cin  >> temp;
 		bool neg = false;
-			while(!validateInput(temp,validChars) || !parse::validNegative(temp)){
+		bool overflow = false;
+			while(!validateInput(temp,validChars) || (!parse::validNegative(temp) && parse::containsChar(temp,'-'))){
 				temp = "";
-				if(parse::containsChar(temp, '-'))
-					if(!parse::validNegative(temp))
+				neg = parse::containsChar(temp, '-') && !parse::validNegative(temp);
+				overflow = !(atol(temp.c_str()) <=MAX_SIGNED_INTEGER && atol(temp.c_str())>= MIN_INTEGER);
+				if(neg || overflow)
 					{
-						neg = true;
+					if(neg)
+						{
+							std::cout << std::endl << "Error! Invalid negative!" << std::endl;
+							neg = false;
+						}
+					if(overflow)
+						{
+							std::cout << std::endl << "Error! Number entered caused an integer overflow!";
+							overflow = false;
+						}
 					}
-				if(neg)
-					{
-						std::cout << std::endl << "Error! Invalid negative!" << std::endl;
-						neg = false;
-					}
+					
 				else	
-					std::cout << std::endl << invalidMsg << std::endl;
+				std::cout << std::endl << invalidMsg << std::endl;
 				std::cout << inputPrompt;
 				std::cin  >> temp;
 					if(validateInput(temp,validChars) && !(atol(temp.c_str()) <=MAX_SIGNED_INTEGER && atol(temp.c_str())>= MIN_INTEGER))
+					{
 						temp = "h";
+						overflow = true;
+					}
 			}
 		return atoi(temp.c_str());
+}
+        
+unsigned int input::getUnsignedInt(std::string& inputPrompt, const std::string& validChars, const std::string& invalidMsg)
+{
+	 	std::string temp = "";
+		std::cout << std::endl << inputPrompt;
+		std::cin  >> temp;
+		bool overflow = false;
+		while(!validateInput(temp,validChars) || parse::containsChar(temp,'-')){
+				temp = "";
+				overflow = !(atol(temp.c_str()) <=MAX_UNSIGNED_INTEGER && atol(temp.c_str())>= 0);
+				if(overflow)
+					{
+						std::cout << std::endl << "Error! Number entered caused an integer overflow!";
+						overflow = false;
+					}
+				else
+				std::cout << std::endl << invalidMsg << std::endl;
+				std::cout << inputPrompt;
+				std::cin  >> temp;
+					if(validateInput(temp,validChars) && !(atol(temp.c_str()) <=MAX_UNSIGNED_INTEGER && atol(temp.c_str())>= 0))
+					{
+						temp = "h";
+						overflow = true;
+					}					
+			}
+		return (unsigned int)atol(temp.c_str());
         }
         
-double input::validateInputDouble (std::string & inputPrompt, const std::string & validChars, const std::string & invalidMsg)
-        {
+double input::getDouble (std::string & inputPrompt, const std::string & validChars, const std::string & invalidMsg)
+{
         	std::string temp = "";
 			std::cout << std::endl << inputPrompt;
 			std::cin  >> temp;
 			bool point = false;
 			bool neg = false;
-			while(!validateInput(temp,validChars) || parse::countChar(temp,'.') > 1 || !parse::validNegative(temp))
+			while(!validateInput(temp,validChars) || parse::countChar(temp,'.') > 1 || (!parse::validNegative(temp) && parse::containsChar(temp,'-')))
 			{
 			neg = parse::containsChar(temp, '-') && !parse::validNegative(temp);
 			point =  parse::containsChar(temp,'.') && parse::countChar(temp,'.') > 1;
@@ -90,14 +127,14 @@ double input::validateInputDouble (std::string & inputPrompt, const std::string 
 		return static_cast<double>(atof(temp.c_str()));
         }
         
-float input::validateInputFloat (std::string & inputPrompt,const std::string & validChars, const std::string & invalidMsg)
-        {
+float input::getFloat (std::string & inputPrompt,const std::string & validChars, const std::string & invalidMsg)
+{
         	std::string temp = "";
 			std::cout << std::endl << inputPrompt;
 			std::cin  >> temp;
 			bool point = false;
 			bool neg = false;
-			while(!validateInput(temp,validChars) || parse::countChar(temp,'.') > 1 || !parse::validNegative(temp))
+			while(!validateInput(temp,validChars) || parse::countChar(temp,'.') > 1 || (!parse::validNegative(temp) && parse::containsChar(temp,'-')))
 			{
 				neg = parse::containsChar(temp, '-') && !parse::validNegative(temp);
 				point =  parse::containsChar(temp,'.') && parse::countChar(temp,'.') > 1;
@@ -123,36 +160,29 @@ float input::validateInputFloat (std::string & inputPrompt,const std::string & v
 		return atof(temp.c_str());
         }
         
-long input::validateInputLong (std::string & inputPrompt, const std::string & validChars, const std::string & invalidMsg)
-        {
+long input::getLong (std::string & inputPrompt, const std::string & validChars, const std::string & invalidMsg)
+{
         	std::string temp = "";
 			std::cout << std::endl << inputPrompt;
 			std::cin  >> temp;
 			bool neg =false;
-			while(!validateInput(temp,validChars) || !parse::validNegative(temp)){
-				temp = "";
+			while(!validateInput(temp,validChars) || (!parse::validNegative(temp) && parse::containsChar(temp,'-'))){
+				neg = parse::containsChar(temp, '-') && !parse::validNegative(temp);
 					if(neg)
 					{
 						std::cout << std::endl << "Error! Invalid negative!" << std::endl;
 						neg = false;
 					}
-				else	
+					temp = "";
 				std::cout << std::endl << invalidMsg << std::endl;
 				std::cout << inputPrompt;
 				std::cin  >> temp;
-				if(parse::containsChar(temp, '-'))
-					if(!parse::validNegative(temp))
-					{
-						temp = "h";
-						neg = true;
-						continue;
-					}
 			}
 			
 		return atol(temp.c_str());
         }
         
-int input::validateRangeInt(std::string& inputPrompt, int low, int high)
+int input::getRangeInt(std::string& inputPrompt, int low, int high)
 {
 		std::string temp = "";
 			std::cout << std::endl << inputPrompt;
@@ -183,7 +213,6 @@ std::string input::intToString (int i[], int length)
 	return returnstring;
 }
 
-
 template<typename ValueType> std::string input::toString(ValueType v)
 {
     std::ostringstream oss;
@@ -211,7 +240,7 @@ int input::menu (std::vector<std::string> choices, std::string& inputMessage)
 	temp = "";
 	std::cin  >> temp;
 	}
-	return atoi(temp.c_str());
+	return atoi(temp.c_str())-1;
 }
 
 bool input::validateInput (std::string & str, const std::string & validChars)
@@ -229,7 +258,6 @@ bool input::validateInputRange(int low, int high, int input)
 	}
 	return low<=input && high >= input;
 }
-
 
 std::vector<std::string> parse::parseFileText(std::ifstream file)
 {
@@ -253,11 +281,10 @@ int parse::countChar(std::string& string, char c)
 
 bool parse::containsChar(std::string& string, char c)
 {
-	return string.find_first_not_of(c) != std::string::npos;
+	return countChar(string,c) != 0;
 }
 
 bool parse::validNegative(std::string& number)
 {
 	return number[0] == '-' && countChar(number, '-') == 1;
 }
-
