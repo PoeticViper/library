@@ -7,6 +7,8 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
+#include <stdint.h>
+
 
 #define DEFAULT_VALID_INPUT_FLOAT DEFAULT_VALID_INPUT_DOUBLE
 #define DEFAULT_VALID_INPUT_LONG DEFAULT_VALID_INPUT_INT
@@ -34,28 +36,28 @@ class input {
     public:
     
     	
-    	static std::string validateInputString(std::string& inputPrompt,
+    	static std::string getString(std::string& inputPrompt,
             	                               const std::string& validChars=DEFAULT_VALID_INPUT_STRING, 
 											   const std::string& invalidMsg=DEFAULT_INVALID_STRING);
-    	static char validateInputChar(std::string& inputPrompt,
+    	static char getChar(std::string& inputPrompt,
 									  const std::string& validChars=DEFAULT_VALID_INPUT_CHAR,
 									  const std::string& invalidMsg=DEFAULT_INVALID_CHAR);
-		static int validateInputInt(std::string& inputPrompt,
+		static int getInt(std::string& inputPrompt,
             	                    const std::string& validChars=DEFAULT_VALID_INPUT_INT,
 									const std::string& invalidMsg=DEFAULT_INVALID_NUM);
-		static unsigned int validateInputUnsignedInt(std::string& inputPrompt,
+		static unsigned int getUnsignedInt(std::string& inputPrompt,
             	                    const std::string& validChars=DEFAULT_VALID_INPUT_INT,
 									const std::string& invalidMsg=DEFAULT_INVALID_NUM);
-   		static double validateInputDouble(std::string& inputPrompt,
+   		static double getDouble(std::string& inputPrompt,
             	                          const std::string& validChars=DEFAULT_VALID_INPUT_DOUBLE,
 										  const std::string& invalidMsg=DEFAULT_INVALID_NUM);
-    	static float validateInputFloat(std::string& inputPrompt,
+    	static float getFloat(std::string& inputPrompt,
             	                        const std::string& validChars=DEFAULT_VALID_INPUT_FLOAT,
 										const std::string& invalidMsg=DEFAULT_INVALID_NUM);
-    	static long validateInputLong(std::string& inputPrompt,
+    	static long getLong(std::string& inputPrompt,
             	                      const std::string& validChars=DEFAULT_VALID_INPUT_LONG,
 									  const std::string& invalidMsg=DEFAULT_INVALID_NUM);
-		static int validateRangeInt(std::string& inputPrompt, int low, int high);
+		static int getRangeInt(std::string& inputPrompt, int low, int high);
 		                     
 		static int menu(std::vector<std::string> choices, std::string& inputMessage);
 		
