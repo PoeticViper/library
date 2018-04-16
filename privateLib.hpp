@@ -29,10 +29,6 @@
 class input {
 
 
-
-	private:
-    	static bool validateInput(std::string& input,
-                              const std::string& validChars);
     public:
     
     	
@@ -63,7 +59,7 @@ class input {
 		
 		template<typename ValueType>  static std::string toString(ValueType v);
 		
-		static bool validateInputRange(int low, int high, int input);
+		
 		
 		static std::string intToString(int i[], int length);
 };
@@ -75,5 +71,8 @@ class parse {
 		static int countChar(std::string& string, char c);
 		static bool containsChar(std::string& string, char c);
 		static bool validNegative(std::string& num);
+		static bool validateInputRange(int low, int high, int input);
+	    	static bool validateInput(std::string& input,
+                              const std::string& validChars);
 };
 #endif
