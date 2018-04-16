@@ -5,7 +5,7 @@ std::string input::getString (std::string & inputPrompt, const std::string & val
 		std::string temp = "";
 		std::cout << std::endl << inputPrompt;
 		std::cin  >> temp;
-	while(!validateInput(temp,validChars)){
+	while(!parse::validateInput(temp,validChars)){
 		temp = "";
 		std::cout << std::endl << invalidMsg << std::endl;
 		std::cout << inputPrompt;
@@ -19,7 +19,7 @@ char input::getChar(std::string & inputPrompt, const std::string & validChars, c
 	std::string temp = "";
 		std::cout << std::endl << inputPrompt;
 		std::cin  >> temp;
-	while(!validateInput(temp,validChars) || temp.length() !=1){
+	while(!parse::validateInput(temp,validChars) || temp.length() !=1){
 		temp = "";
 		std::cout << std::endl << invalidMsg << std::endl;
 		std::cout << inputPrompt;
@@ -35,7 +35,7 @@ int input::getInt (std::string & inputPrompt, const std::string & validChars,  c
 		std::cin  >> temp;
 		bool neg = false;
 		bool overflow = false;
-			while(!validateInput(temp,validChars) || (!parse::validNegative(temp) && parse::containsChar(temp,'-'))){
+			while(!parse::validateInput(temp,validChars) || (!parse::validNegative(temp) && parse::containsChar(temp,'-'))){
 				temp = "";
 				neg = parse::containsChar(temp, '-') && !parse::validNegative(temp);
 				overflow = !(atol(temp.c_str()) <=MAX_SIGNED_INTEGER && atol(temp.c_str())>= MIN_INTEGER);
@@ -57,7 +57,7 @@ int input::getInt (std::string & inputPrompt, const std::string & validChars,  c
 				std::cout << std::endl << invalidMsg << std::endl;
 				std::cout << inputPrompt;
 				std::cin  >> temp;
-					if(validateInput(temp,validChars) && !(atol(temp.c_str()) <=MAX_SIGNED_INTEGER && atol(temp.c_str())>= MIN_INTEGER))
+					if(parse::validateInput(temp,validChars) && !(atol(temp.c_str()) <=MAX_SIGNED_INTEGER && atol(temp.c_str())>= MIN_INTEGER))
 					{
 						temp = "h";
 						overflow = true;
@@ -72,7 +72,7 @@ unsigned int input::getUnsignedInt(std::string& inputPrompt, const std::string& 
 		std::cout << std::endl << inputPrompt;
 		std::cin  >> temp;
 		bool overflow = false;
-		while(!validateInput(temp,validChars) || parse::containsChar(temp,'-')){
+		while(!parse::validateInput(temp,validChars) || parse::containsChar(temp,'-')){
 				temp = "";
 				overflow = !(atol(temp.c_str()) <=MAX_UNSIGNED_INTEGER && atol(temp.c_str())>= 0);
 				if(overflow)
@@ -84,7 +84,7 @@ unsigned int input::getUnsignedInt(std::string& inputPrompt, const std::string& 
 				std::cout << std::endl << invalidMsg << std::endl;
 				std::cout << inputPrompt;
 				std::cin  >> temp;
-					if(validateInput(temp,validChars) && !(atol(temp.c_str()) <=MAX_UNSIGNED_INTEGER && atol(temp.c_str())>= 0))
+					if(parse::validateInput(temp,validChars) && !(atol(temp.c_str()) <=MAX_UNSIGNED_INTEGER && atol(temp.c_str())>= 0))
 					{
 						temp = "h";
 						overflow = true;
@@ -100,7 +100,7 @@ double input::getDouble (std::string & inputPrompt, const std::string & validCha
 			std::cin  >> temp;
 			bool point = false;
 			bool neg = false;
-			while(!validateInput(temp,validChars) || parse::countChar(temp,'.') > 1 || (!parse::validNegative(temp) && parse::containsChar(temp,'-')))
+			while(!parse::validateInput(temp,validChars) || parse::countChar(temp,'.') > 1 || (!parse::validNegative(temp) && parse::containsChar(temp,'-')))
 			{
 			neg = parse::containsChar(temp, '-') && !parse::validNegative(temp);
 			point =  parse::containsChar(temp,'.') && parse::countChar(temp,'.') > 1;
@@ -134,7 +134,7 @@ float input::getFloat (std::string & inputPrompt,const std::string & validChars,
 			std::cin  >> temp;
 			bool point = false;
 			bool neg = false;
-			while(!validateInput(temp,validChars) || parse::countChar(temp,'.') > 1 || (!parse::validNegative(temp) && parse::containsChar(temp,'-')))
+			while(!parse::validateInput(temp,validChars) || parse::countChar(temp,'.') > 1 || (!parse::validNegative(temp) && parse::containsChar(temp,'-')))
 			{
 				neg = parse::containsChar(temp, '-') && !parse::validNegative(temp);
 				point =  parse::containsChar(temp,'.') && parse::countChar(temp,'.') > 1;
@@ -166,7 +166,7 @@ long input::getLong (std::string & inputPrompt, const std::string & validChars, 
 			std::cout << std::endl << inputPrompt;
 			std::cin  >> temp;
 			bool neg =false;
-			while(!validateInput(temp,validChars) || (!parse::validNegative(temp) && parse::containsChar(temp,'-'))){
+			while(!parse::validateInput(temp,validChars) || (!parse::validNegative(temp) && parse::containsChar(temp,'-'))){
 				neg = parse::containsChar(temp, '-') && !parse::validNegative(temp);
 					if(neg)
 					{
@@ -193,7 +193,7 @@ int input::getRangeInt(std::string& inputPrompt, int low, int high)
 				low = high;
 				high = temp;
 			}
-			while(!validateInput(temp, DEFAULT_VALID_INPUT_INT) || !(low <= atoi(temp.c_str()) && high >= atoi(temp.c_str()))){
+			while(!parse::validateInput(temp, DEFAULT_VALID_INPUT_INT) || !(low <= atoi(temp.c_str()) && high >= atoi(temp.c_str()))){
 				temp = "";
 				std::cout << std::endl << DEFAULT_INVALID_STRING << "Please enter a number between " << low << " and " << high << std::endl;
 				std::cout << inputPrompt;
@@ -229,7 +229,7 @@ int input::menu (std::vector<std::string> choices, std::string& inputMessage)
 	}
 	std::string temp = "";
 	std::cin >> temp;
-	while(!(validateInput(temp,"123456789")) || !validateInputRange(1,choices.size(), atoi(temp.c_str())))
+	while(!(parse::validateInput(temp,"123456789")) || !parse::validateInputRange(1,choices.size(), atoi(temp.c_str())))
 	{
 		std::cout << std::endl << DEFAULT_INVALID_STRING << "Please enter a number between 1 and " << toString(choices.size()) << std::endl;
 		std::cout <<"\n" + inputMessage << std::endl;
@@ -243,12 +243,12 @@ int input::menu (std::vector<std::string> choices, std::string& inputMessage)
 	return atoi(temp.c_str())-1;
 }
 
-bool input::validateInput (std::string & str, const std::string & validChars)
+bool parse::validateInput (std::string & str, const std::string & validChars)
 {
 	return str.find_first_not_of(validChars) == std::string::npos;
 }
 
-bool input::validateInputRange(int low, int high, int input)
+bool parse::validateInputRange(int low, int high, int input)
 {
 	if(low > high)
 	{
